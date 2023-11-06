@@ -26,9 +26,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # outer apps
+    'rest_framework',
     'drf_spectacular',
     'corsheaders',
+
+    # inner apps
+    'file_upload',
 ]
 
 MIDDLEWARE = [
@@ -134,6 +139,7 @@ SPECTACULAR_SETTINGS = {
     'VERSION': 'v1',
     'SERVE_INCLUDE_SCHEMA': False,
     'LICENSE': {'name': 'BSD License'},
+    'COMPONENT_SPLIT_REQUEST': True,
 
     'SERVE_PUBLIC': True,
     'SERVE_PERMISSIONS': ['rest_framework.permissions.AllowAny'],
