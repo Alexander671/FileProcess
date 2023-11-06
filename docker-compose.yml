@@ -1,0 +1,43 @@
+services:
+  back:
+    container_name: back
+    restart: always
+    command: >
+      sh -c "
+        python manage.py migrate --noinput &&
+        python manage.py collectstatic --noinput &&
+        python manage.py runserver 0.0.0.0:8000"
+    build:
+      context: ./
+    ports:
+      - "8000:8000"
+    networks:
+      - nw_internal
+      - nw_external
+    env_file:
+      - ./.env
+    depends_on:
+      - postgres
+
+
+  postgres:
+    container_name: postgres
+    image: postgres:15.3-bullseye
+    restart: always
+    ports:
+      - '${POSTGRES_PORT:-5432}:${POSTGRES_PORT:-5432}'
+    networks:
+      - nw_internal
+    env_file:
+      - ./.env
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    command: -p ${POSTGRES_PORT:-5432}
+
+volumes:
+  postgres:
+
+networks:
+  nw_external:
+  nw_internal:
+    internal: true
