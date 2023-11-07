@@ -18,7 +18,50 @@ services:
       - ./.env
     depends_on:
       - postgres
+      - redis
 
+  celery_worker:
+    restart: always
+    command: celery -A core worker -l error
+    build:
+      context: ./
+    env_file:
+      - ./.env
+#    volumes:
+#      - media:/app/media/
+#      - static:/app/static/
+    networks:
+      - nw_external
+      - nw_internal
+    depends_on:
+      - redis
+
+  celery_beat:
+    container_name: celery_beat
+    restart: always
+    command: celery -A core beat
+    build:
+      context: ./
+    env_file:
+      - ./.env
+#    volumes:
+#      - media:/app/media/
+#      - static:/app/static/
+    networks:
+      - nw_external
+      - nw_internal
+    depends_on:
+      - redis
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    ports:
+      - '${REDIS_PORT:-6379}:${REDIS_PORT:-6379}'
+    command: redis-server --requirepass ${REDIS_PASSWORD:-yourpassword} --port ${REDIS_PORT:-6379}  --bind 0.0.0.0
+    networks:
+      - nw_internal
 
   postgres:
     container_name: postgres
@@ -36,6 +79,7 @@ services:
 
 volumes:
   postgres:
+  redis:
 
 networks:
   nw_external:
