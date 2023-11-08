@@ -13,11 +13,11 @@ def process_file(file_id):
         file.processed = True
         file.save()
 
-    elif filename ==  '.jpg':
+    elif filename == '.jpg':
         file.processed = True
         file.save()
 
-    elif filename ==  '.pdf':
+    elif filename == '.pdf':
         file.processed = True
         file.save()
 
