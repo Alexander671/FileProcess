@@ -36,23 +36,6 @@ services:
     depends_on:
       - redis
 
-  celery_beat:
-    container_name: celery_beat
-    restart: always
-    command: celery -A core beat
-    build:
-      context: ./
-    env_file:
-      - ./.env
-#    volumes:
-#      - media:/app/media/
-#      - static:/app/static/
-    networks:
-      - nw_external
-      - nw_internal
-    depends_on:
-      - redis
-
   redis:
     container_name: redis
     image: redis:latest
