@@ -16,6 +16,9 @@ services:
       - nw_external
     env_file:
       - ./.env
+    volumes:
+      - media:/app/media/
+      - static:/app/static/
     depends_on:
       - postgres
       - redis
@@ -27,9 +30,9 @@ services:
       context: ./
     env_file:
       - ./.env
-#    volumes:
-#      - media:/app/media/
-#      - static:/app/static/
+    volumes:
+      - media:/app/media/
+      - static:/app/static/
     networks:
       - nw_external
       - nw_internal
@@ -63,6 +66,8 @@ services:
 volumes:
   postgres:
   redis:
+  media:
+  static:
 
 networks:
   nw_external:

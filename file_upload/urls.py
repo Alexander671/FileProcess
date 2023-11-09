@@ -4,5 +4,5 @@ from .views import FileViewSet
 
 urlpatterns = [
     path('', FileViewSet.as_view({'get': 'list'})),
-    path('upload/', FileViewSet.as_view({'post': 'create'})),
+    path('upload/', FileViewSet.as_view({'post': 'create'}), name='file-upload'),
 ]
