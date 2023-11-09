@@ -26,9 +26,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # outer apps
+    'rest_framework',
     'drf_spectacular',
     'corsheaders',
+    'django_celery_results',
+
+    # inner apps
+    'file_upload',
 ]
 
 MIDDLEWARE = [
@@ -134,6 +140,7 @@ SPECTACULAR_SETTINGS = {
     'VERSION': 'v1',
     'SERVE_INCLUDE_SCHEMA': False,
     'LICENSE': {'name': 'BSD License'},
+    'COMPONENT_SPLIT_REQUEST': True,
 
     'SERVE_PUBLIC': True,
     'SERVE_PERMISSIONS': ['rest_framework.permissions.AllowAny'],
@@ -145,3 +152,23 @@ CORS_ALLOW_CREDENTIALS = True
 
 # CSRF
 CSRF_TRUSTED_ORIGINS = tuple('http{}://{}'.format('' if ENV == 'local' else 's', x) for x in ALLOWED_HOSTS)
+
+
+# REDIS
+REDIS_LOGIN = env.str('REDIS_LOGIN')
+REDIS_PASSWORD = env.str('REDIS_PASSWORD')
+REDIS_HOST = env.str('REDIS_HOST')
+REDIS_PORT = env.str('REDIS_PORT')
+REDIS_URL = f'redis://{REDIS_LOGIN}:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}'
+
+# Celery Configuration Options
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_CACHE_BACKEND = 'django-cache'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_BROKER_URL = CELERY_RESULT_BACKEND = REDIS_URL
+
+ALLOWED_EXTENSIONS = env.list('ALLOWED_EXTENSIONS')
+FILE_SIZE = env.int('FILE_SIZE')

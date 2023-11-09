@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path, re_path
+from django.urls import include, path, re_path
 from django.views.static import serve
 
 from core.settings import ENV, PROJECT_NAME, STATIC_ROOT, MEDIA_ROOT
@@ -12,6 +12,9 @@ admin.site.site_header = f'{PROJECT_NAME} | {ENV}'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # inner apps
+    path('file/', include('file_upload.urls')),
 
     # static for DEBUG = False
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': STATIC_ROOT}),
